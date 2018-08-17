@@ -1,0 +1,65 @@
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-md-4 col-lg-3 p-b-50">
+            <div class="leftbar p-r-20 p-r-0-sm">
+                <!--  -->
+                <h4 class="m-text14 p-b-7">
+                  Admin Account
+                </h4>
+
+                <ul class="p-b-54">
+                    <li class="p-t-4">
+                        <a href="/admin/ventas" class="s-text13 active1">
+                           Sales
+                        </a>
+                    </li>
+
+                    <li class="p-t-4">
+                        <a href="/admin/inventario" class="s-text13">
+                            Stock
+                        </a>
+                    </li>
+<!--
+                    <li class="p-t-4">
+                        <a href="/admin/nuevo-inventario" class="s-text13">
+                            Add Items
+                        </a>
+                    </li>
+
+                    <li class="p-t-4">
+                        <a href="#" class="s-text13">
+                            Edit Items
+                        </a>
+                    </li>
+-->
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-8 col-lg-9 p-b-50">
+             
+            <table class="table">
+  <thead class="thead-dark">
+
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Size</th>
+      <th scope="col">Price</th>
+    </tr>
+  </thead>
+  <tbody>
+      {{#each clothes}}
+    <tr>
+      <td> <p>{{this.dataValues.id_products}}</p></td>
+      <td><p>{{this.dataValues.size}}</p></td>
+      <td> <p>$ {{this.dataValues.final_price}}</p>
+</td>
+    </tr>
+      {{/each}}
+  </tbody>
+</table>
+            
+         
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,119 @@
+<section class="cart bgwhite p-t-70 p-b-80">
+	<div class="container">
+		<!-- Cart item -->
+		<div class="container-table-cart pos-relative">
+			<div class="wrap-table-shopping-cart bgwhite">
+				<table class="table-shopping-cart text-center" id="table-shopping-cart">
+					<tr class="table-head">
+						<th class="column-1"></th>
+						<th class="column-2">Product Name</th>
+						<th class="column-3">Size</th>
+						<th class="column-4">Price</th>
+						<th class="column-5"></th>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+		<!-- Total -->
+		<div class="bo9 w-size18 p-l-40 p-r-40 p-t-30 p-b-38 m-t-30 m-r-0 m-l-auto p-lr-15-sm">
+			<div class="size15 trans-0-4">
+				<!-- Button -->
+				<p class="total-amount"></p>
+			</div>
+		</div>
+
+
+		<!--
+		<div class="bo9 w-size18 p-l-40 p-r-40 p-t-30 p-b-38 m-t-30 m-r-0 m-l-auto p-lr-15-sm">
+			<div class="size15 trans-0-4">
+				<!-- Button 
+				<button class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4" id="buy">
+					BUY
+				</button>
+			</div>
+		</div>
+-->
+		<div class="bo9 w-size18 p-l-40 p-r-40 p-t-30 p-b-38 m-t-30 m-r-0 m-l-auto p-lr-15-sm">
+			<div class="size15 trans-0-4">
+				<!-- Button trigger modal -->
+				<button type="button" class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4" id="buy" data-id="{{this.dataValues.id}}"
+				 data-toggle="modal" data-target="#exampleModalCenter">
+					BUY
+				</button>
+			</div>
+		</div>
+
+		<!-- Modal -->
+		<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-body">
+						Thank you for your purchase!
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+
+
+	</div>
+</section>
+
+
+<script>
+	$(document).ready(function () {
+
+		function showProducts() {
+			var storageData = JSON.parse(sessionStorage.getItem("product"));
+			var table = $("#table-shopping-cart");
+			var totalAmount = $(".total-amount");
+			var totalPrice = 0;
+
+			for (i = 0; i < storageData.length; i++) {
+				var tableRow = $("<tr class='table-row'>");
+				tableRow.append("<img src='/images/" + storageData[i].product + ".png' width='57.14px' height='87.14px' alt='IMG-PRODUCT'>");
+				tableRow.append("<td>" + storageData[i].product + "</td>");
+				tableRow.append("<td>" + storageData[i].size + "</td>");
+				tableRow.append("<td>$ " + storageData[i].price + "</td>");
+				tableRow.append("<button type='button' class='btn btn-secondary " + storageData[i].id + "' id='" + i + "'>X</button>");
+				table.append(tableRow);
+
+				totalPrice += parseInt(storageData[i].price);
+			}
+
+			totalAmount.text("Total Amount to pay: $ " + totalPrice);
+
+		}
+
+		showProducts();
+
+		$(document).on("click", ".btn", function () {
+
+
+			var productToRemove = event.currentTarget.id;
+			var storageData = JSON.parse(sessionStorage.getItem("product"));
+			storageData.splice(productToRemove, 1);
+			sessionStorage.setItem("product", JSON.stringify(storageData));
+
+			$(".table-row").remove();
+			showProducts();
+
+
+		});
+
+		$(document).on("click", "#buy", function () {
+			event.preventDefault();
+
+			$.ajax({
+				url: "/api/ventas",
+				method: "POST",
+				data: { bagData: sessionStorage.getItem("product") }
+			}).then(function() {
+				sessionStorage.removeItem("product");
+			});
+		});
+	});
+</script>

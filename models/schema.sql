@@ -1,0 +1,3 @@
+DROP DATABASE IF EXISTS nudestudio;
+CREATE DATABASE nudestudio;
+

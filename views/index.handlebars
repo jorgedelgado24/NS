@@ -1,0 +1,117 @@
+<div class="container">
+  <div class="row">
+    {{#each clothes}}
+    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-6 collections">
+      <a href="#" class="block2-name dis-block s-text3 p-b-5">
+        <img src="/images/{{this.dataValues.item_name}}.png" class="img-fluid" alt="IMG-PRODUCT">
+      </a>
+      <ul id="example-list" class="list-group">
+        <li id="item-{{this.dataValues.id}}" class="list-group-item {{this.dataValues.type}}">
+          <a href="#">{{this.dataValues.item_name}}</a>
+        </li>
+
+        <div class="form-group">
+          <label for="sel1">Sizes:</label>
+          <select class="form-control" id="sel-{{this.dataValues.id}}">
+            {{#each this.dataValues.Sizes}} {{#if this.quantity}}
+            <option>{{this.size}}</option>
+            {{/if}} {{/each}}
+          </select>
+        </div>
+
+        <li class="list-group-item">
+          {{#if this.dataValues.discount}}
+          <span class="block2-price m-text6 p-r-5">
+            <strike>$ {{this.dataValues.regular_price}}</strike>
+          </span>
+          {{/if}}
+          <span class="block2-price m-text6 p-r-5" id="price-{{this.dataValues.id}}">
+            $ {{this.dataValues.final_price}}
+          </span>
+        </li>
+
+      </ul>
+
+
+      <!-- Button trigger modal -->
+      <button type="button" class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4 add-to-bag" data-id="{{this.dataValues.id}}"
+        data-toggle="modal" data-target="#exampleModalCenter">
+        Add to Bag
+      </button>
+
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-body">
+              Added to Bag!
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!--
+      <button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4 add-to-bag" data-id="{{this.dataValues.id}}">
+        Add to Bag
+      </button>
+      -->
+    </div>
+    {{/each}}
+  </div>
+</div>
+
+
+
+<!-- JS script -->
+<script>
+
+
+
+  $(document).ready(function () {
+
+    function checkBag() {
+      $(".bag-amount").empty();
+      if (sessionStorage.getItem("product")) {
+        $(".bag-amount").text(JSON.parse(sessionStorage.getItem("product")).length);
+      }
+    }
+
+    checkBag();
+
+    //when clicking Add to Bag button
+    $(document).on("click", ".add-to-bag", addToBag);
+
+    //Function to add to Bag
+    function addToBag(event) {
+      var prodId = event.currentTarget.attributes[2].value;
+      var size = $("#sel-" + prodId + " option:selected")[0].text;
+      var price = $("#price-" + prodId)[0].innerText.slice(2);
+      var prodName = $("#item-" + prodId)[0].innerText;
+
+      if (sessionStorage.getItem("product")) {
+        var storageData = JSON.parse(sessionStorage.getItem("product"));
+        storageData.push({
+          id: prodId,
+          size: size,
+          price: price,
+          product: prodName
+        });
+        //console.log(storageData);
+        sessionStorage.setItem("product", JSON.stringify(storageData));
+      } else {
+        sessionStorage.setItem("product", JSON.stringify([{
+          id: prodId,
+          size: size,
+          price: price,
+          product: prodName
+        }]));
+      }
+      checkBag();
+
+    }
+
+  });
+
+
+</script>
